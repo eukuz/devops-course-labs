@@ -51,4 +51,27 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-pip-
 
+    - name: Run Snyk to check the Python app for issues
+      uses: snyk/actions/python@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        command: test
+        args: 
+          --file=app_python/requirements.txt
+          --package-manager=pip
+          --skip-unresolved
+
+
+
+    - name: Run Snyk to check Docker image for issues
+      uses: snyk/actions/docker@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      with:
+        args: --docker eukuz/devops_course_python_app:latest --severity-threshold=high
+
+        
+
+
 
